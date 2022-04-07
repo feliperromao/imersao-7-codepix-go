@@ -9,9 +9,10 @@ import (
 
 type Account struct {
 	Base
-	Bank      *Bank `valid:"-"`
-	OwnerName string `json:"owner_name" valid:"notnull"`
-	Number    string `json:"number" valid:"notnull"`
+	Bank      *Bank     `valid:"-"`
+	OwnerName string    `json:"owner_name" valid:"notnull"`
+	Number    string    `json:"number" valid:"notnull"`
+	PixKeys   []*PixKey `valid:"-"`
 }
 
 func (account *Account) isValid() error {
@@ -24,9 +25,9 @@ func (account *Account) isValid() error {
 
 func NewAccount(bank *Bank, ownerName string, number string) (*Account, error) {
 	account := Account{
-		Bank: bank,
+		Bank:      bank,
 		OwnerName: ownerName,
-		Number: number,
+		Number:    number,
 	}
 
 	account.ID = uuid.NewV4().String()
