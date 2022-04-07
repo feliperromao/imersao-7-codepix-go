@@ -15,6 +15,12 @@ const (
 	TransactionConfirmed string = "confirmed"
 )
 
+type TransactionRepositoryInterface interface {
+	Register(t *Transaction) error
+	Save(t *Transaction) error
+	Find(id string) (*Transaction, error)
+}
+
 type Transactions struct {
 	Transaction []Transaction
 }
