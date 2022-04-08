@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	TransactionPeiding 	 string = "pending"
+	TransactionPeiding   string = "pending"
 	TransactionCompleted string = "completed"
 	TransactionError     string = "error"
 	TransactionConfirmed string = "confirmed"
@@ -28,13 +28,14 @@ type Transactions struct {
 type Transaction struct {
 	Base              `valid:"required"`
 	AccountFrom       *Account `valid:"-"`
-	Amount            float32  `json:"amount" valid:"notnull"`
+	AccountFromID     string   `gorm:"column:account_from_id;type:uuid"`
+	Amount            float32  `gorm:"type:float" json:"amount" valid:"notnull"`
 	PixKeyTo          *PixKey  `valid:"-"`
-	Status            string   `json:"status" valid:"notnull"`
-	Description       string   `json:"description" valid:"notnull"`
-	CancelDescription string   `json:"cancel_description" valid:"-"`
+	PixKeyToId        string   `gorm:"column:pix_key_to_id;type:uuid" valid:"notnull"`
+	Status            string   `gorm:"type:varchar(20)" json:"status" valid:"notnull"`
+	Description       string   `gorm:"type:varchar(255)" json:"description" valid:"notnull"`
+	CancelDescription string   `gorm:"type:varchar(255)" json:"cancel_description" valid:"-"`
 }
-
 
 func (t *Transaction) isValid() error {
 	_, err := govalidator.ValidateStruct(t)
@@ -61,9 +62,9 @@ func (t *Transaction) isValid() error {
 func NewTransaction(accountFrom *Account, amount float32, pixKeyTo *PixKey, description string) (*Transaction, error) {
 	transaction := Transaction{
 		AccountFrom: accountFrom,
-		Amount: amount,
-		PixKeyTo: pixKeyTo,
-		Status: TransactionPeiding,
+		Amount:      amount,
+		PixKeyTo:    pixKeyTo,
+		Status:      TransactionPeiding,
 		Description: description,
 	}
 
@@ -83,7 +84,7 @@ func (t *Transaction) Complete() error {
 	t.UpdatedAt = time.Now()
 
 	err := t.isValid()
-	return  err
+	return err
 }
 
 func (t *Transaction) Confirm() error {
@@ -91,7 +92,7 @@ func (t *Transaction) Confirm() error {
 	t.UpdatedAt = time.Now()
 
 	err := t.isValid()
-	return  err
+	return err
 }
 
 func (t *Transaction) Cancel(description string) error {
@@ -100,5 +101,5 @@ func (t *Transaction) Cancel(description string) error {
 	t.UpdatedAt = time.Now()
 
 	err := t.isValid()
-	return  err
+	return err
 }
