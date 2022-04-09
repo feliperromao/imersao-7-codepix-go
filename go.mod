@@ -9,5 +9,6 @@ require (
 	github.com/joho/godotenv v1.4.0
 	github.com/lib/pq v1.10.5
 	github.com/satori/go.uuid v1.2.0
+	google.golang.org/grpc v1.45.0
 	gorm.io/driver/sqlite v1.3.1
 )
