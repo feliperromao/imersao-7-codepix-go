@@ -2,6 +2,7 @@ version: "3"
 
 services:
   app:
+    container_name: app
     build: .
     ports:
     - "50051:50051"
@@ -11,6 +12,7 @@ services:
       - "host.docker.internal:172.17.0.1"
 
   db:
+    container_name: db
     image: postgres:9.4
     restart: always
     tty: true
@@ -23,6 +25,7 @@ services:
       - "5432:5432"
 
   pgadmin:
+    container_name: pgadmin
     image: dpage/pgadmin4
     tty: true
     environment:
@@ -34,11 +37,13 @@ services:
       - db
 
   zookeeper:
+    container_name: zookeeper
     image: confluentinc/cp-zookeeper:latest
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
 
   kafka:
+    container_name: kafka
     image: confluentinc/cp-kafka:latest
     depends_on:
       - zookeeper
@@ -57,6 +62,7 @@ services:
       - "host.docker.internal:172.17.0.1"
 
   kafka-topics-generator:
+    container_name: kafka-topics-generator
     image: confluentinc/cp-kafka:latest
     depends_on:
       - kafka
@@ -68,6 +74,7 @@ services:
         kafka-topics --create --topic=bank001 --if-not-exists --bootstrap-server=kafka:9092 &&
         kafka-topics --create --topic=bank002 --if-not-exists --bootstrap-server=kafka:9092"
   control-center:
+    container_name: control-center
     image: confluentinc/cp-enterprise-control-center:6.0.1
     hostname: control-center
     depends_on:
