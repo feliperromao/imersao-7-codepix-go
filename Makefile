@@ -18,3 +18,6 @@ grpc-client:
 
 cobra-init:
 	docker exec -ti app cobra-cli init
+
+codepix:
+	docker exec -ti app go run main.go grpc -p 50051
